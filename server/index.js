@@ -1,7 +1,17 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const expressFileUpload = require("express-fileupload");
+const cors = require("cors"); // Import cors
 const app = express();
+
+// Use cors middleware
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Your React app's URL
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
