@@ -7,6 +7,7 @@ router.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   if (username === "user" && password === "password") {
+    console.log("Login Successful");
     res.json({ token: "dummy-token" });
   } else {
     res.status(401).send("Invalid credentials");

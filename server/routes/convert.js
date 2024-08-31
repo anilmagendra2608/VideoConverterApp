@@ -11,6 +11,15 @@ router.post("/", (req, res) => {
   let file = req.files.file;
   let fileName = `output.${to}`;
 
+  console.log("to:", to);
+  console.log("file:", file);
+  console.log("fileName:", fileName);
+
+  // Try accessing tmp folder before moving input file
+  fs.access("tmp/", fs.constants.F_OK, (err) => {
+    console.log("Unable to access tmp/");
+  });
+
   // Upload the file to be converted
   file.mv("tmp/" + file.name, function (err) {
     if (err) return res.status(500).send(err);

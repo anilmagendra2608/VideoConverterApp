@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(
   expressFileUpload({
     useTempFiles: true,
-    tempFileDir: "/tmp/",
+    tempFileDir: __dirname + "/tmp/",
   })
 );
 
