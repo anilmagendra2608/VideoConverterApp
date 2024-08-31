@@ -13,15 +13,19 @@ function Login() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
+      credentials: "include", // Include credentials to handle sessions
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-          navigate("/convert");
+        if (data.success) {
+          navigate("/convert"); // Navigate to the convert page on successful login
         } else {
-          alert("Login failed");
+          alert(data.message); // Show the error message from the server
         }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
       });
   };
 

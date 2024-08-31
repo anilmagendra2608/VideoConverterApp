@@ -6,7 +6,48 @@ const ffmpegConfig = require("../utils/ffmpegConfig");
 
 ffmpegConfig(); // Configure FFmpeg paths
 
-router.post("/", (req, res) => {
+// Middleware to check if the user has the required role
+const checkRole = (role) => {
+  return (req, res, next) => {
+    if (req.session.user && req.session.user.role === role) {
+      next();
+    } else {
+      res.status(403).json({ success: false, message: "Access denied" });
+    }
+  };
+};
+
+// Middleware to validate conversion format based on user role
+const validateFormat = (req, res, next) => {
+  const allowedFormatsForAdmin = ["mp4", "flv", "webm", "mov"];
+  const allowedFormatsForUser = ["mp4"];
+
+  const requestedFormat = req.body.to;
+
+  if (req.session.user && req.session.user.role === "admin") {
+    // Admins can use all formats
+    if (allowedFormatsForAdmin.includes(requestedFormat)) {
+      next();
+    } else {
+      res
+        .status(400)
+        .json({ success: false, message: "Invalid format for admin" });
+    }
+  } else {
+    // Non-admins can only use mp4 format
+    if (requestedFormat === "mp4") {
+      next();
+    } else {
+      res.status(403).json({
+        success: false,
+        message: "Non-admins can only convert to MP4",
+      });
+    }
+  }
+};
+
+// Apply the middleware functions to the conversion route
+router.post("/", validateFormat, (req, res) => {
   let to = req.body.to;
   let file = req.files.file;
   let fileName = `output.${to}`;
@@ -17,7 +58,10 @@ router.post("/", (req, res) => {
 
   // Try accessing tmp folder before moving input file
   fs.access("tmp/", fs.constants.F_OK, (err) => {
-    console.log("Unable to access tmp/");
+    if (err) {
+      console.log("Unable to access tmp/");
+      return res.status(500).send("Temporary directory not accessible");
+    }
   });
 
   // Upload the file to be converted

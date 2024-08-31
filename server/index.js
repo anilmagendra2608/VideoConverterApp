@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const bodyParser = require("body-parser");
 const expressFileUpload = require("express-fileupload");
 const cors = require("cors"); // Import cors
@@ -10,6 +11,16 @@ app.use(
     origin: "http://localhost:3000", // Your React app's URL
     methods: ["GET", "POST"],
     credentials: true,
+  })
+);
+
+// Middleware for sessions
+app.use(
+  session({
+    secret: "your_secret_key", // Change this to a strong secret key
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // Set to true if using HTTPS
   })
 );
 
