@@ -11,9 +11,6 @@ RUN npm install
 # Step 4: Copy the rest of the application code
 COPY . .
 
-# Step 5: Build the React application
-RUN npm run build
-
 # Step 6: Expose the port your client runs on
 EXPOSE 3000
 

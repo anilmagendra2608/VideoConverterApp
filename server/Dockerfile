@@ -14,9 +14,6 @@ RUN apk add --no-cache ffmpeg
 # Step 5: Copy the rest of the application code
 COPY . .
 
-# Step 5: Build the React application
-RUN npm run build
-
 # Step 6: Expose the port your server runs on
 EXPOSE 4000
 
