@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  client:
+    container_name: videoConverter_Client
+    image: videoConverter-client:1.0.0
+    build:
+      context: ./client  # Path to the client directory
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"       # Map port 3000 on the host to port 3000 in the container
+    depends_on:
+      - server             # Ensure the server starts before the client
+    environment:
+      - NODE_ENV=development
+
+  server:
+    container_name: videoConverter_Server
+    image: videoConverter-server:1.0.0
+    build:
+      context: ./server  # Path to the server directory
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"       # Map port 4000 on the host to port 4000 in the container
+    environment:
+      - NODE_ENV=development
