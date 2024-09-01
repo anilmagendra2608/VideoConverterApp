@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   client:
-    container_name: videoConverter_Client
-    image: videoConverter-client:1.0.0
+    container_name: videoconverter_client
+    image: videoconverter-client:1.0.0
     build:
       context: ./client  # Path to the client directory
       dockerfile: Dockerfile
@@ -15,8 +13,8 @@ services:
       - NODE_ENV=development
 
   server:
-    container_name: videoConverter_Server
-    image: videoConverter-server:1.0.0
+    container_name: videoconverter_server
+    image: videoconverter-server:1.0.0
     build:
       context: ./server  # Path to the server directory
       dockerfile: Dockerfile
